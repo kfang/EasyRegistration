@@ -1,0 +1,15 @@
+<configuration>
+
+    <root level="">
+        <appender class="ch.qos.logback.core.ConsoleAppender">
+            <encoder><pattern>%d %-5level %logger - %msg%n</pattern></encoder>
+        </appender>
+    </root>
+
+    <logger name="reactivemongo" level="INFO" additivity="false">
+        <appender class="ch.qos.logback.core.ConsoleAppender">
+            <encoder><pattern>%d %-5level %logger - %msg%n</pattern></encoder>
+        </appender>
+    </logger>
+
+</configuration>
