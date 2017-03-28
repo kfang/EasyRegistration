@@ -14,7 +14,7 @@ case class Registrant (
   comments: Option[String],
 
   flags: Seq[String],     //TODO: enumerate different flags
-  parent: Option[String], //TODO: implement Parent model
+  guardian: Option[String], //TODO: implement Guardian model
   extraInformation: Option[BSONDocument] = None,
   _id: String = UUID.randomUUID().toString
 )

@@ -8,6 +8,7 @@ import scala.concurrent.Future
 
 class AppDatabase(driver: MongoDriver, conn: MongoConnection, db: DefaultDB) {
 
+  val Guardians: BSONCollection   = db[BSONCollection]("guardians")
   val Registrants: BSONCollection = db[BSONCollection]("registrants")
   val Users: BSONCollection       = db[BSONCollection]("users")
 
