@@ -1,5 +1,6 @@
 package com.github.kfang.easyregistration
 
+import com.github.kfang.easyregistration.models.Registrant
 import reactivemongo.api.collections.bson.BSONCollection
 import reactivemongo.api.{DefaultDB, MongoConnection, MongoDriver}
 import reactivemongo.core.nodeset.Authenticate
@@ -7,11 +8,13 @@ import reactivemongo.core.nodeset.Authenticate
 import scala.concurrent.Future
 
 class AppDatabase(driver: MongoDriver, conn: MongoConnection, db: DefaultDB) {
+  import driver.system.dispatcher
 
   val Contacts: BSONCollection    = db[BSONCollection]("contacts")
   val Registrants: BSONCollection = db[BSONCollection]("registrants")
   val Users: BSONCollection       = db[BSONCollection]("users")
 
+  Registrant.MONGO_INDEXES.foreach(Registrants.indexesManager.ensure)
 }
 
 object AppDatabase {
