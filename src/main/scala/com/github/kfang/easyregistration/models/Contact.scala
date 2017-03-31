@@ -19,7 +19,7 @@ case class Contact(
   cellPhone: Option[String],
   relationship: Option[String],
 
-  flags: Seq[ContactFlag],
+  flags: Option[Seq[ContactFlag]],
   extraInformation: Option[BSONDocument],
   _id: String = UUID.randomUUID().toString
 )
