@@ -7,6 +7,7 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import spray.json.JsObject
 
 import scala.concurrent.Future
+import ch.megard.akka.http.cors.CorsDirectives._
 
 class V1Routes(implicit App: AppPackage) {
 
@@ -14,7 +15,7 @@ class V1Routes(implicit App: AppPackage) {
     onSuccess(f)(js => complete(js))
   }
 
-  val routes: Route = get {
+  val routes: Route = cors(){
     pathPrefix("registrations"){
       (post & pathEnd & entity(as[RegistrationCreateRequest])){
         (request) => request.getResponse
