@@ -12,6 +12,7 @@ class AppDatabase(driver: MongoDriver, conn: MongoConnection, db: DefaultDB) {
 
   val Contacts: BSONCollection    = db[BSONCollection]("contacts")
   val Registrants: BSONCollection = db[BSONCollection]("registrants")
+  val Registrations: BSONCollection = db[BSONCollection]("registrations")
   val Users: BSONCollection       = db[BSONCollection]("users")
 
   Registrant.MONGO_INDEXES.foreach(Registrants.indexesManager.ensure)

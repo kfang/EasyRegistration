@@ -19,8 +19,8 @@ case class Registrant (
 
   contacts: Option[Seq[String]],
   flags: Option[Seq[RegistrantFlag]],
-  createdOn: BSONDateTime = BSONDateTime(System.currentTimeMillis()),
-  _id: String = UUID.randomUUID().toString
+  createdOn: Option[BSONDateTime] = Some(BSONDateTime(System.currentTimeMillis())),
+  _id: Option[String] = Some(UUID.randomUUID().toString)
 )
 
 object Registrant {

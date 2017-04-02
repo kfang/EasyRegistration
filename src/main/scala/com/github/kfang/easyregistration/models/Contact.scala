@@ -2,7 +2,7 @@ package com.github.kfang.easyregistration.models
 
 import java.util.UUID
 
-import reactivemongo.bson.{BSONDocument, BSONDocumentReader, BSONDocumentWriter, BSONHandler, Macros}
+import reactivemongo.bson.{BSONDateTime, BSONDocument, BSONDocumentReader, BSONDocumentWriter, BSONHandler, Macros}
 import spray.json.RootJsonFormat
 import com.github.kfang.easyregistration.utils.BsonJsonProtocol._
 
@@ -21,12 +21,13 @@ case class Contact(
 
   flags: Option[Seq[ContactFlag]],
   extraInformation: Option[BSONDocument],
-  _id: String = UUID.randomUUID().toString
+  createdOn: Option[BSONDateTime] = Some(BSONDateTime(System.currentTimeMillis())),
+  _id: Option[String] = Some(UUID.randomUUID().toString)
 )
 
 object Contact {
   implicit val __bsf: BSONDocumentReader[Contact]
     with BSONDocumentWriter[Contact]
     with BSONHandler[BSONDocument, Contact] = Macros.handler[Contact]
-  implicit val __jsf: RootJsonFormat[Contact] = jsonFormat12(Contact.apply)
+  implicit val __jsf: RootJsonFormat[Contact] = jsonFormat13(Contact.apply)
 }
