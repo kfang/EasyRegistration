@@ -3,7 +3,7 @@ package com.github.kfang.easyregistration.routing
 import akka.http.scaladsl.server.Directive1
 import akka.http.scaladsl.server.directives.ParameterDirectives._
 import com.github.kfang.easyregistration.AppPackage
-import com.github.kfang.easyregistration.models.Registrant
+import com.github.kfang.easyregistration.models.{Contact, Registrant}
 import com.github.kfang.easyregistration.utils.{StringUnmarshallers, UnmarshalledSort}
 import reactivemongo.api.{Cursor, QueryOpts}
 import reactivemongo.bson.BSONDocument
@@ -31,6 +31,7 @@ object RegistrantListRequest {
 
   implicit class RegistranatList(request: RegistrantListRequest)(implicit App: AppPackage){
     import App.sys.dispatcher
+    private implicit val __db = App.db
 
     private val limit = math.max(request.limit, 0)
     private val skipN = math.max(request.page, 0) * limit
@@ -49,15 +50,24 @@ object RegistrantListRequest {
       App.db.Registrants.count(Some(selector))
     }
 
+    private def getSideload(registrants: Seq[Registrant]): Future[Map[String, JsValue]] = {
+      request.sideload.map(sideload => {
+        Future.sequence(sideload.map({
+          case "contacts" => Contact.findByIds(registrants.flatMap(_.contacts).flatten).map(cxs => Some("contacts" -> cxs.toJson))
+          case _ => Future.successful(None)
+        })).map(fields => fields.flatten.toMap)
+      }).getOrElse(Future.successful(Map.empty))
+    }
+
     def getResponse: Future[JsObject] = {
       for {
-        registranats  <- getRegistrants
+        registrants  <- getRegistrants
         numFound      <- getNumFound
+        sideload      <- getSideload(registrants)
+        basicResponse =  Map("registrants" -> registrants.toJson, "numFound" -> JsNumber(numFound))
+        fullResponse  =  basicResponse.++(sideload)
       } yield {
-        JsObject(
-          "registrants" -> registranats.toJson,
-          "numFound" -> JsNumber(numFound)
-        )
+        JsObject(fullResponse)
       }
     }
   }
