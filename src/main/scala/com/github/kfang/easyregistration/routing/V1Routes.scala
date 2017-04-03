@@ -16,12 +16,16 @@ class V1Routes(implicit App: AppPackage) {
   }
 
   val routes: Route = cors(){
+    pathPrefix("registrants"){
+      (get & pathEnd & RegistrantListRequest.params){
+        (request) => request.getResponse
+      }
+    } ~
     pathPrefix("registrations"){
       (post & pathEnd & entity(as[RegistrationCreateRequest])){
         (request) => request.getResponse
       }
-    } ~
-    complete("Hello World!")
+    }
   }
 
 }
