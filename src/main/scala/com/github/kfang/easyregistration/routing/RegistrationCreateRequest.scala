@@ -3,7 +3,8 @@ package com.github.kfang.easyregistration.routing
 import java.util.UUID
 
 import com.github.kfang.easyregistration.AppPackage
-import com.github.kfang.easyregistration.models.{Contact, Registrant, RegistrantFlag, Registration}
+import com.github.kfang.easyregistration.models._
+import com.github.kfang.easyregistration.services.EmailService.Email
 import com.github.kfang.easyregistration.utils.BsonJsonProtocol._
 import reactivemongo.bson.BSONDateTime
 import spray.json._
@@ -20,6 +21,24 @@ object RegistrationCreateRequest {
 
   implicit class RegistrationCreate(request: RegistrationCreateRequest)(implicit App: AppPackage){
     import App.sys.dispatcher
+
+    private def sendEmail(registration: Registration, registrants: Seq[Registrant]) = {
+      for {
+        recipient <- request.contacts.find(_.flags.exists(_.contains(ContactFlag.Guardian))).flatMap(_.email)
+        subject = "Thanks for Registering!"
+        message =
+          s"""
+            |Thanks for registering!
+            |
+            |Your confirmation code: ${registration.code}
+            |
+            |We received the following registrants:
+            |${registrants.map(r => s"${r.firstName} ${r.lastName}").mkString("\n")}
+          """.stripMargin
+      } yield {
+        App.services.emailService ! Email(recipient, subject, message)
+      }
+    }
 
     def getResponse: Future[JsObject] = {
 
@@ -47,6 +66,7 @@ object RegistrationCreateRequest {
         _ <- Future.sequence(contacts.map(App.db.Contacts.insert(_)))
         _ <- Future.sequence(registrants.map(App.db.Registrants.insert(_)))
         _ <- App.db.Registrations.insert(registration)
+        _ =  sendEmail(registration, registrants)
       } yield {
         JsObject(
           "registration" -> registration.toJson,

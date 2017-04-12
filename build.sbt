@@ -16,7 +16,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-slf4j"           % "2.4.17",
   "org.reactivemongo" %% "reactivemongo"        % "0.12.1",
   "com.beachape"      %% "enumeratum"           % "1.5.10",
-  "ch.megard"         %% "akka-http-cors"       % "0.1.11"
+  "ch.megard"         %% "akka-http-cors"       % "0.1.11",
+  "org.apache.commons" % "commons-email"        % "1.4"
 )
 
 enablePlugins(DockerPlugin)

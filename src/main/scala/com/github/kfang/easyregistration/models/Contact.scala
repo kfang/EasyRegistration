@@ -19,6 +19,7 @@ case class Contact(
   state: Option[String],
   zip: Option[String],
 
+  email: Option[String],
   homePhone: Option[String],
   cellPhone: Option[String],
   relationship: Option[String],

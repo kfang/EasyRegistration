@@ -18,6 +18,10 @@ class AppConfig {
   val MONGO_NODES: Seq[String]  = CONFIG.getStringList("mongo.nodes").asScala
   val MONGO_DB: String          = CONFIG.getString("mongo.db")
 
+  val SMTP_HOSTNAME: String     = CONFIG.getString("smtp.hostname")
+  val SMTP_USERNAME: String     = CONFIG.getString("smtp.username")
+  val SMTP_PASSWORD: String     = CONFIG.getString("smtp.password")
+
   val SYSTEM_NAME: String = CONFIG.getString("system.name")
 
 

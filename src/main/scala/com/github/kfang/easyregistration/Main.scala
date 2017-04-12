@@ -16,7 +16,8 @@ object Main extends App {
 
   for {
     appDB   <- AppDatabase(appConfig)
-    appPkg  =  AppPackage(system, appConfig, appDB)
+    srvs    =  AppServices(appConfig)
+    appPkg  =  AppPackage(system, appConfig, appDB, srvs)
     routing =  new V1Routes()(appPkg).routes
     _       <- Http().bindAndHandle(routing, interface = appConfig.HTTP_INTERFACE, port = appConfig.HTTP_PORT)
   } yield {
