@@ -35,7 +35,7 @@ object Contact {
   implicit val __bsf: BSONDocumentReader[Contact]
     with BSONDocumentWriter[Contact]
     with BSONHandler[BSONDocument, Contact] = Macros.handler[Contact]
-  implicit val __jsf: RootJsonFormat[Contact] = jsonFormat13(Contact.apply)
+  implicit val __jsf: RootJsonFormat[Contact] = jsonFormat14(Contact.apply)
 
   implicit class ContactUtils(t: Contact.type)(implicit db: AppDatabase, ctx: ExecutionContext){
 
