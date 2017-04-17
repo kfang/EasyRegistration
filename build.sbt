@@ -17,7 +17,9 @@ libraryDependencies ++= Seq(
   "org.reactivemongo" %% "reactivemongo"        % "0.12.1",
   "com.beachape"      %% "enumeratum"           % "1.5.10",
   "ch.megard"         %% "akka-http-cors"       % "0.1.11",
-  "org.apache.commons" % "commons-email"        % "1.4"
+  "org.apache.commons" % "commons-email"        % "1.4",
+  "com.softwaremill.akka-http-session" %% "core" % "0.4.0",
+  "com.softwaremill.akka-http-session" %% "jwt" % "0.4.0"
 )
 
 enablePlugins(DockerPlugin)
