@@ -24,6 +24,8 @@ class AppConfig {
 
   val SYSTEM_NAME: String = CONFIG.getString("system.name")
 
+  val SYSTEM_CREDENTIALS_USERNAME: String = CONFIG.getString("system.credentials.username")
+  val SYSTEM_CREDENTIALS_PASSWORD: String = CONFIG.getString("system.credentials.password")
 
   def printConfig(): Unit = {
     LoggerFactory.getLogger(getClass).info(
