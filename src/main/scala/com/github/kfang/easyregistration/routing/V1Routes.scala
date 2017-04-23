@@ -30,6 +30,9 @@ class V1Routes(implicit App: AppPackage) {
     pathPrefix("registrants"){
       (get & pathEnd & RegistrantListRequest.params & basicAuth){
         (request, _) => request.getResponse
+      } ~
+      (get & path(JavaUUID) & basicAuth){
+        (id, _) => new RegistrantReadRequest().getResponse(id)
       }
     } ~
     pathPrefix("registrations"){
