@@ -2,10 +2,13 @@ package com.github.kfang.easyregistration.models
 
 import java.util.UUID
 
+import com.github.kfang.easyregistration.AppDatabase
 import com.github.kfang.easyregistration.utils.BsonJsonProtocol._
 import reactivemongo.api.indexes.{Index, IndexType}
 import reactivemongo.bson.{BSONDateTime, BSONDocument, BSONDocumentReader, BSONDocumentWriter, BSONHandler, Macros}
 import spray.json.RootJsonFormat
+
+import scala.concurrent.{ExecutionContext, Future}
 
 case class Registrant (
   firstName: String,
@@ -35,4 +38,11 @@ object Registrant {
     Index(key = Seq("createdOn" -> IndexType.Descending)),
     Index(key = Seq("flags" -> IndexType.Ascending))
   )
+
+  implicit class RegistrantUtils(t: Registrant.type)(implicit db: AppDatabase, ctx: ExecutionContext){
+    def findById(id: String): Future[Option[Registrant]] = {
+      db.Registrants.find(BSONDocument("_id" -> id)).one[Registrant]
+    }
+  }
+
 }
