@@ -10,14 +10,19 @@ import spray.json.JsObject
 
 import scala.concurrent.Future
 import ch.megard.akka.http.cors.CorsDirectives._
+import ch.megard.akka.http.cors.CorsSettings
+import com.github.kfang.easyregistration.models.ApiError
 
 import scala.util.{Failure, Success}
+import akka.http.scaladsl.model.HttpMethods._
+import scala.collection.immutable.Seq
 
 class V1Routes(implicit App: AppPackage) {
 
   implicit def fToR(f: Future[JsObject]): Route = {
     onComplete(f){
       case Success(jso) => complete(jso)
+      case Failure(err: ApiError) => complete(err.code -> err.body)
       case Failure(err) => complete(StatusCodes.InternalServerError -> err.toString)
     }
   }
@@ -32,7 +37,11 @@ class V1Routes(implicit App: AppPackage) {
   }
   private val basicAuth = authenticateBasic("", upass)
 
-  val routes: Route = cors(){
+  private val corsSettings = CorsSettings.defaultSettings.copy(
+    allowedMethods = Seq(GET, POST, HEAD, OPTIONS, PUT)
+  )
+
+  val routes: Route = cors(corsSettings){
     pathPrefix("registrants"){
       (get & pathEnd & RegistrantListRequest.params & basicAuth){
         (request, _) => request.getResponse
