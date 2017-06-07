@@ -51,6 +51,9 @@ class V1Routes(implicit App: AppPackage) {
       } ~
       (put & path(JavaUUID) & entity(as[RegistrantUpdateRequest]) &basicAuth){
         (id, request, _) => request.getResponse(id)
+      } ~
+      (get & path("registrants.csv")){
+        new RegistrantsCSVRequest().getResponse
       }
     } ~
     pathPrefix("registrations"){

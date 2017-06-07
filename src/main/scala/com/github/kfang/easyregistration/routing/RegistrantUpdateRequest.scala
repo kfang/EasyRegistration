@@ -60,7 +60,7 @@ object RegistrantUpdateRequest {
         update = Seq(
           MongoPartialUpdate("firstName", request.firstName, unsetOnEmpty = false),
           MongoPartialUpdate("lastName", request.lastName, unsetOnEmpty = false),
-          MongoPartialUpdate("gender", request.lastName),
+          MongoPartialUpdate("gender", request.gender),
           MongoPartialUpdate("birthday", request.birthday),
 
           MongoPartialUpdate("allergies", request.allergies),
