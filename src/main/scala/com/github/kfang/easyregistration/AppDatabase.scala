@@ -20,8 +20,7 @@ class AppDatabase(driver: MongoDriver, conn: MongoConnection, db: DefaultDB) {
 
 object AppDatabase {
 
-  def apply(implicit config: AppConfig): Future[AppDatabase] = {
-    val driver = new MongoDriver()
+  def apply(implicit config: AppConfig, driver: MongoDriver): Future[AppDatabase] = {
     import driver.system.dispatcher
     val authentications = Seq(Authenticate(
       db = config.MONGO_AUTH_DB,
